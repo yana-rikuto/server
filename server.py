@@ -5,7 +5,6 @@ file_path = "./sensor_data.csv"
 port_num = 21051 # 学籍番号を各自入力
 
 @app.route('/', methods=['GET'])
-
 def get_html():
     return render_template('./index.html')
 
