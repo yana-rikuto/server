@@ -6,7 +6,7 @@ port_num = 21051 # 学籍番号を各自入力
 
 @app.route('/', methods=['GET'])
 def get_html():
-    return render_template('./index.html')
+    return render_template('./templates/index.html')
 
 @app.route('/lux', methods=['POST'])
 def update_lux():
