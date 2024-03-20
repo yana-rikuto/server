@@ -5,6 +5,40 @@
         <script>
             const updateLux = async(url, element) => {
                 const sensorData = await fetch(url)
+                    .then(response => response.text())
+                const target = document.getElementById(element)
+                target.innerHTML = `<h1>${sensorData}</h1>`
+            }
+            
+            // 自動更新用の関数
+            const autoUpdateLux = (url, element) => {
+                setInterval(() => { // 一定間隔ごとに更新する
+                    updateLux(url, element)
+                }, 1000) // 1000ミリ秒ごとに更新
+            }
+            
+            // ページ読み込み時に自動更新を開始
+            window.onload = () => {
+                autoUpdateLux('/lux', 'data')
+            }
+        </script>
+    </head>
+    <body>
+        <center>
+            <div id="data">test</div>
+            <!-- ボタンは不要なので削除 -->
+        </center>
+    </body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <title>テストアプリ</title>
+        <script>
+            const updateLux = async(url, element) => {
+                const sensorData = await fetch(url)
                 .then(response => response.text())
                 const target = document.getElementById(element)
                 target.innerHTML = `<h1>${sensorData}</h1>`
@@ -17,4 +51,4 @@
             <input type="button" value="更新" onclick="updateLux('/lux','data')">
         </center>
     </body>
-</html>
+</html> -->
