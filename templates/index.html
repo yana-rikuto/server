@@ -1,42 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>テストアプリ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e0f3ff, #b8d9ff); /* 薄い青のグラデーション */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            height: 100vh; /* 画面全体の高さを埋める */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #data {
+            font-size: 24px;
+            color: #333; /* 文字色を黒に設定 */
+        }
+
+        .side-text {
+            font-size: 36px; /* サイド判定テキストの文字サイズを大きくする */
+            color: #fff; /* テキスト色を白に設定 */
+            background-color: rgba(0, 0, 0, 0.5); /* 半透明の背景色を設定 */
+            padding: 10px 20px; /* テキストの周囲に余白を設定 */
+            border-radius: 10px; /* 角丸にする */
+            margin-top: 20px; /* 上部に余白を設定 */
+        }
+    </style>
+</head>
+<body>
+    <div id="data">test</div>
+    <!-- サイド判定テキストは初めは非表示にしておく -->
+    <div id="side-text" class="side-text" style="display:none;">サイド判定です</div>
+
     <script>
-        let intervalId = null; // 自動更新のIDを保持する変数
-        
-        const updateLux = async(url, element) => {
+        const updateLux = async (url, element) => {
             const sensorData = await fetch(url)
                 .then(response => response.text())
             const target = document.getElementById(element)
-            const luxValue = parseInt(sensorData.split(',')[1]) // 照度値を取得
             target.innerHTML = `<h1>${sensorData}</h1>`
-            if (luxValue > 0) {
-                target.innerHTML += "<p>サイド判定です</p>" // サイド判定を追加
-                clearInterval(intervalId); // サイド判定時に自動更新を停止
+
+            // サイド判定の条件に応じてテキストを表示するかどうかを判断
+            const sideText = document.getElementById('side-text')
+            if (parseInt(sensorData) > 0) {
+                sideText.style.display = 'block'; // サイド判定テキストを表示
+                clearInterval(intervalId); // 更新を停止
+            } else {
+                sideText.style.display = 'none'; // サイド判定テキストを非表示
             }
         }
-        
-        // 自動更新用の関数
+
         const autoUpdateLux = (url, element) => {
-            intervalId = setInterval(() => { // 一定間隔ごとに更新する
+            const intervalId = setInterval(() => {
                 updateLux(url, element)
-            }, 1000) // 1000ミリ秒ごとに更新
+            }, 1000)
         }
-        
-        // ページ読み込み時に自動更新を開始
+
         window.onload = () => {
             autoUpdateLux('/lux', 'data')
         }
     </script>
-</head>
-<body>
-    <center>
-        <div id="data">test</div>
-        <!-- ボタンは不要なので削除 -->
-    </center>
 </body>
 </html>
+
 
 
 
