@@ -1,39 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>テストアプリ</title>
-    <script>
-        const updateLux = async (url, element) => {
-            const sensorData = await fetch(url)
-                .then(response => response.json())
-            const target = document.getElementById(element)
-            target.innerHTML = `<h1>${sensorData.lux}</h1>`
-            if (parseInt(sensorData.lux) > 1) {
-                document.getElementById('side').innerText = "サイド判定"
-            } else {
-                document.getElementById('side').innerText = ""
+    <head>
+        <title>テストアプリ</title>
+        <script>
+            const updateLux = async (url, element) => {
+                const sensorData = await fetch(url)
+                    .then(response => response.json()) // JSON形式のデータを取得
+                const target = document.getElementById(element)
+                target.innerHTML = `<h1>${sensorData.lux}</h1>` // 照度値を更新
+                document.getElementById('side').innerText = sensorData.side // サイド判定結果を更新
             }
-        }
 
-        const autoUpdateLux = (url, element) => {
-            setInterval(() => {
-                updateLux(url, element)
-            }, 1000)
-        }
+            const autoUpdateLux = (url, element) => {
+                setInterval(() => {
+                    updateLux(url, element)
+                }, 1000)
+            }
 
-        window.onload = () => {
-            autoUpdateLux('/lux', 'data')
-        }
-    </script>
-</head>
-<body>
-    <center>
-        <div id="data">test</div>
-        <div id="side"></div> <!-- サイド判定結果を表示する要素 -->
-    </center>
-</body>
+            window.onload = () => {
+                autoUpdateLux('/lux', 'data')
+            }
+        </script>
+    </head>
+    <body>
+        <center>
+            <div id="data">test</div>
+            <!-- <div id="side">サイド判定：</div> サイド判定結果を表示する要素 -->
+        </center>
+    </body>
 </html>
-
 
 
 
