@@ -3,20 +3,21 @@
     <head>
         <title>テストアプリ</title>
         <script>
-            const updateLux = async (url, element) => {
+            const updateLux = async(url, element) => {
                 const sensorData = await fetch(url)
-                    .then(response => response.json()) // JSON形式のデータを取得
+                    .then(response => response.text())
                 const target = document.getElementById(element)
-                target.innerHTML = `<h1>${sensorData.lux}</h1>` // 照度値を更新
-                document.getElementById('side').innerText = sensorData.side // サイド判定結果を更新
+                target.innerHTML = `<h1>${sensorData}</h1>`
             }
-
+            
+            // 自動更新用の関数
             const autoUpdateLux = (url, element) => {
-                setInterval(() => {
+                setInterval(() => { // 一定間隔ごとに更新する
                     updateLux(url, element)
-                }, 1000)
+                }, 1000) // 1000ミリ秒ごとに更新
             }
-
+            
+            // ページ読み込み時に自動更新を開始
             window.onload = () => {
                 autoUpdateLux('/lux', 'data')
             }
@@ -25,10 +26,11 @@
     <body>
         <center>
             <div id="data">test</div>
-            <!-- <div id="side">サイド判定：</div> サイド判定結果を表示する要素 -->
+            <!-- ボタンは不要なので削除 -->
         </center>
     </body>
 </html>
+
 
 
 
