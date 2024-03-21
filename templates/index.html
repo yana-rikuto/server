@@ -30,6 +30,7 @@
             background-color: rgba(0, 0, 0, 0.5); /* 半透明の背景色を設定 */
             padding: 10px 20px; /* テキストの周囲に余白を設定 */
             border-radius: 10px; /* 角丸にする */
+            display: none; /* 初期状態では非表示 */
         }
     </style>
 </head>
@@ -44,12 +45,11 @@
             target.innerHTML = `<h1>${sensorData}</h1>`
 
             // 照度値が0より大きい場合にサイド判定を表示
-            const sideText = document.querySelector('.side-text')
-            if (parseInt(sensorData) > 0) {
+            const luxValue = parseInt(sensorData.split(',')[1]) // 照度値を取得
+            if (luxValue > 0) {
+                const sideText = document.querySelector('.side-text')
                 sideText.style.display = 'block'; // サイド判定テキストを表示
-                clearInterval(intervalId); // 更新を停止
-            } else {
-                sideText.style.display = 'none'; // サイド判定テキストを非表示
+                clearInterval(intervalId); // サイド判定時に自動更新を停止
             }
         }
 
@@ -57,18 +57,18 @@
             const intervalId = setInterval(() => {
                 updateLux(url, element)
             }, 1000)
+            return intervalId; // intervalId を返す
         }
 
         window.onload = () => {
-            autoUpdateLux('/lux', 'data')
+            const intervalId = autoUpdateLux('/lux', 'data'); // intervalId を保持する
         }
     </script>
 
     <!-- サイド判定テキストはdataの下に配置 -->
-    <div class="side-text" style="display:none;">サイド判定です</div>
+    <div class="side-text">サイド判定です</div>
 </body>
 </html>
-
 
 
 
